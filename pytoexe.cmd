@@ -1,1 +1,1 @@
-pyinstaller --clean --win-private-assemblies -F --add-binary ".\chromedriver.exe";"." .\QryStock_alt.spec
+pyinstaller --clean --win-private-assemblies -F --add-binary ".\chromedriver.exe";"." .\QryStock_alt.py

@@ -321,8 +321,12 @@ def start_crawl(Year,Month):
     global table_Window,Qry,Pygui
     Month = int(Month)
     nowtime_year = datetime.today().year - 1911
+    nowtime_month = datetime.today().month
+    isMonthCourrent=True
+    if(int(Year)==nowtime_year):
+        isMonthCourrent = Month <= nowtime_month
     print('開始抓取',Year,'的資料')
-    if( int(Year)<= nowtime_year and Month <= 12 ):
+    if( int(Year)<= nowtime_year and (Month <= 12 and Month >= 1) and isMonthCourrent):
         if(Qry.auto_Mode()):
             return True
         else:

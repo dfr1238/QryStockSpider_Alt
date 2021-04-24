@@ -3,8 +3,8 @@
 block_cipher = None
 
 
-a = Analysis(['QryStock.py'],
-             pathex=['C:\\Users\\dfr12\\Documents\\Coding\\Python\\QryStockSpider'],
+a = Analysis(['QryStock_alt.py'],
+             pathex=['C:\\Users\\dfr12\\Documents\\Coding\\Python\\QryStockSpider_Alt'],
              binaries=[('.\\chromedriver.exe', '.')],
              datas=[],
              hiddenimports=[],
@@ -23,7 +23,7 @@ exe = EXE(pyz,
           a.zipfiles,
           a.datas,
           [],
-          name='QryStock',
+          name='QryStock_alt',
           debug=False,
           bootloader_ignore_signals=False,
           strip=False,
