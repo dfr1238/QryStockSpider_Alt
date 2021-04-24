@@ -55,8 +55,8 @@ class QryStock:
     total=0
     exist=0
     import_csv='.\上市&上櫃.csv'
-    coidList_Dict={"股號":[],"股名":[],"千張持股變化":[],"抓取週千張持股":[],"抓取週之上週千張持股":[]}
-    coidList_Dict_Type={"股號":'string',"股名":'string',"千張持股變化":'double',"抓取週千張持股":'double',"抓取週之上週千張持股":'double'}
+    coidList_Dict={"股號":[],"股名":[],"抓取年月":[],"董監持股變化":[],"抓取月總額":[],"抓取月之上月總額":[]}
+    coidList_Dict_Type={"股號":'string',"股名":'string',"抓取年月":'string',"董監持股變化":'int',"抓取月總額":'int',"抓取月之上月總額":'int'}
 
     def update_TableData(self):
         Pygui.TableList=self.crawlDataDF.values.tolist()
@@ -68,7 +68,7 @@ class QryStock:
         self.update_TableData()
         pass
     def export(self):
-        filename = sg.popup_get_file('選擇儲存路徑','匯出表格',default_path=f'{self.current_Year}-{self.current_Month} - 董監事持股餘額明細資料 － 匯出',save_as=True,file_types=(("CSV 檔","*.csv"),("Excel 檔","*.xlsx")),no_window=True)
+        filename = sg.popup_get_file('選擇儲存路徑','匯出表格',default_path=f'{self.current_Year}-{self.current_Month} - 董監事持股餘額明細資料 － 匯出',save_as=True,file_types=(("Excel 檔","*.xlsx"),("CSV 檔","*.csv")),no_window=True)
         if(pathlib.Path(filename).suffix==".csv"):
             self.crawlDataDF.to_csv(filename,encoding='utf-8', index=False)
         if(pathlib.Path(filename).suffix==".xlsx"):
@@ -135,8 +135,8 @@ class QryStock:
         DataType_Elemnt.select_by_index(1)
         wait.until(lambda driver: driver.find_element_by_id(id_='co_id'))
         self.inputCoid_Element = self.driver.find_element_by_id(id_='co_id')
-        time.sleep(.5)
-        self.inputCoid_Element.click()
+        #time.sleep(1.2)
+        self.driver.execute_script("arguments[0].click();", self.inputCoid_Element)
         self.inputCoid_Element.send_keys(coidData[0],Keys.ENTER)
         return True
 
@@ -160,14 +160,16 @@ class QryStock:
         wait = ui.WebDriverWait(self.driver,3)
         wait.until(lambda driver: driver.find_element_by_id(id_='month'))
         self.month_Element = Select(self.driver.find_element_by_name('month'))
-        if(self.current_Month == 1):
-            self.month_Element.select_by_index(12)
-        else:
-            self.month_Element.select_by_index(self.current_Month-1)
         wait.until(lambda driver: driver.find_element_by_id(id_='year'))
         self.year_Element = self.driver.find_element_by_id(id_='year')
-        self.year_Element.click()
-        self.year_Element.send_keys(self.current_Year,Keys.ENTER)
+        if(self.current_Month == 1):
+            self.month_Element.select_by_index(12)
+            self.year_Element.click()
+            self.year_Element.send_keys(self.current_Year-1,Keys.ENTER)
+        else:
+            self.month_Element.select_by_index(self.current_Month-1)
+            self.year_Element.click()
+            self.year_Element.send_keys(self.current_Year,Keys.ENTER)
         pass
 
     def submitGetThisMonth(self):
